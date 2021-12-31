@@ -67,7 +67,15 @@ function dragendBricks() { // funktion för avslutandet av event drag and drop
 		boardElem[i].removeEventListener("dragover",bricksOverBoard);
         boardElem[i].removeEventListener("dragleave",bricksOverBoard);
 		boardElem[i].removeEventListener("drop", bricksOverBoard);
+        
 	}
+    
+}
+
+function disableBrick(brick) { // function to disable events on brick
+	brick.removeEventListener("dragover",bricksOverBoard);
+    brick.removeEventListener("dragleave",bricksOverBoard);
+	brick.removeEventListener("drop", bricksOverBoard);
 }
 
 function bricksOverBoard(e) { // funktion för när brickorna är på board, 
@@ -84,16 +92,20 @@ function bricksOverBoard(e) { // funktion för när brickorna är på board,
     droppedBricks ++;
     }
 
-    if (droppedBricks == 4) { // aktiverar knappen newBricksBtn när alla bilderna dragits till board, annars inaktiv
-        newBricksBtn.disabled = false;
-        droppedBricks = 0;
+    if( this.classList.contains("filled")){ // if position on board is filled with a brick...
+        this.draggable = false; // ...make it un-draggable...
+        disableBrick(this) // ...and disable events on brick (no other brick can replace this brick now)
     }
-    
-    if (e.type == "dragover") {
+    else if (e.type == "dragover") {
         this.style.backgroundColor = "green";
     }
 
     else if (e.type == "dragleave") {
         this.style.backgroundColor = "";
+    }
+
+    if (droppedBricks == 4) { // aktiverar knappen newBricksBtn när alla bilderna dragits till board, annars inaktiv
+        newBricksBtn.disabled = false;
+        droppedBricks = 0;
     }
 }
